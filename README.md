@@ -2,7 +2,11 @@
 
 > A.I. for GraphQL
 
-*Rapidly deploy intelligent agents for your business data services*
+*Rapidly create intelligent Agents for business data and operations*
+
+Full documentation: https://toolql.com
+
+### Get Started
 
 Step 1: Set connections in `toolql.json`
 
@@ -50,7 +54,7 @@ Hi, how can I help?
 Alderaan featured in two Star Wars movies, A New Hope and Revenge of the Sith.
 ```
 
-*Next Steps*
+### Next Steps
 
 * Explore the included examples
 

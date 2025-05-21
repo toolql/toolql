@@ -9,10 +9,14 @@
     "node": ">= 22.15.1 < 23"
   },
   "packageManager": "pnpm@10.10.0",
+  "bin": {
+    "toolql": "bin/toolql.js"
+  },
   "scripts": {
     "dev": "tsc --watch",
     "prepare": "tsc",
-    "test": "mocha -r source-map-support/register -r extensionless/register lib/**/**test.js"
+    "test": "mocha -r source-map-support/register -r extensionless/register lib/**/**test.js",
+    "test-bin": "node bin/toolql.js"
   },
   "author": "tim.stewart@toolql.com",
   "repository": "github:toolql/toolql",
@@ -20,10 +24,14 @@
   "devDependencies": {
     "@types/chai": "^5.2.2",
     "@types/mocha": "^10.0.10",
+    "@types/node": "^22.15.21",
     "chai": "^5.2.0",
     "extensionless": "^1.9.9",
     "mocha": "^11.4.0",
     "source-map-support": "^0.5.21",
     "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "dotenv": "^16.5.0"
   }
 }
