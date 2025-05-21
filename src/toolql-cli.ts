@@ -1,5 +1,4 @@
 import "dotenv/config"
-import readline from "node:readline"
 import { createInterface } from 'node:readline';
 import { exit, stdin, stdout } from 'node:process';
 
@@ -17,7 +16,11 @@ export const main = () => {
 	rl.prompt();
 
 	rl.on('line', (line) => {
-		console.log("I'll get back to you on that one! Anything else?")
+		if (line.match(/Chewbacca/)) {
+			console.log("Ah yes, Chewbacca...");
+		} else {
+			console.log("I'll get back to you on that one! Anything else?")
+		}
 		rl.prompt();
 	}).on('close', () => {
 		console.log("")
