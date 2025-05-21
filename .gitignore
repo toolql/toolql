@@ -1,5 +1,5 @@
 /node_modules/
-/bin/
+/lib/
 
 .vscode/*
 !.vscode/extensions.json

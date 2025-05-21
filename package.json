@@ -1,4 +1,29 @@
 {
   "name": "toolql",
-  "description": "A.I. for GraphQL"
+  "description": "A.I. for GraphQL",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "lib/toolql.js",
+  "types": "lib/toolql.d.ts",
+  "engines": {
+    "node": ">= 22.15.1 < 23"
+  },
+  "packageManager": "pnpm@10.10.0",
+  "scripts": {
+    "dev": "tsc --watch",
+    "prepare": "tsc",
+    "test": "mocha -r source-map-support/register -r extensionless/register lib/test/**/**test.js"
+  },
+  "author": "tim.stewart@toolql.com",
+  "repository": "github:toolql/toolql",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chai": "^5.2.2",
+    "@types/mocha": "^10.0.10",
+    "chai": "^5.2.0",
+    "extensionless": "^1.9.9",
+    "mocha": "^11.4.0",
+    "source-map-support": "^0.5.21",
+    "typescript": "^5.8.3"
+  }
 }
