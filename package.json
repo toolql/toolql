@@ -12,7 +12,7 @@
   "scripts": {
     "dev": "tsc --watch",
     "prepare": "tsc",
-    "test": "mocha -r source-map-support/register -r extensionless/register lib/test/**/**test.js"
+    "test": "mocha -r source-map-support/register -r extensionless/register lib/**/**test.js"
   },
   "author": "tim.stewart@toolql.com",
   "repository": "github:toolql/toolql",
