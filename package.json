@@ -16,7 +16,8 @@
     "dev": "tsc --watch",
     "prepare": "tsc",
     "test": "mocha -r source-map-support/register -r extensionless/register lib/**/**test.js",
-    "test-bin": "node bin/toolql.js"
+    "test-bin": "node bin/toolql.js",
+    "test-direct": "node -r extensionless/register ./lib/toolql-cli.js"
   },
   "author": "tim.stewart@toolql.com",
   "repository": "github:toolql/toolql",
@@ -36,6 +37,9 @@
     "typescript-eslint": "^8.32.1"
   },
   "dependencies": {
+    "@langchain/core": "^0.3.56",
+    "@langchain/langgraph": "^0.2.73",
+    "@langchain/openai": "^0.5.10",
     "dotenv": "^16.5.0"
   }
 }
