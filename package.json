@@ -10,7 +10,7 @@
   },
   "packageManager": "pnpm@10.10.0",
   "bin": {
-    "toolql": "bin/toolql.js"
+    "toolql": "./bin/toolql.js"
   },
   "scripts": {
     "dev": "tsc --watch",

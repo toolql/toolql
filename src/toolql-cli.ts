@@ -1,5 +1,6 @@
 import "dotenv/config"
 import { createInterface } from "node:readline"
+import * as process from "node:process"
 import { exit, stdin, stdout } from "node:process"
 import { StructuredTool } from "@langchain/core/tools"
 import { getLlm } from "./get-llm"
@@ -33,6 +34,10 @@ export const main = () => {
       { messages: [new HumanMessage(line)] },
       { configurable: { thread_id } }
     )
+    // Tried the following for streaming without success
+    // for await (const chunk of result) {
+    //   process.stdout.write(chunk.toString())
+    // }
     const answer = result.messages[result.messages.length - 1].content
     console.log(answer)
 
