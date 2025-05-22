@@ -1,5 +1,3 @@
 #!/usr/bin/env node
-import "extensionless/register"
-import { main } from "../lib/toolql-cli.js"
-
-main()
+await import("extensionless/register")
+import("../lib/toolql-cli.js")

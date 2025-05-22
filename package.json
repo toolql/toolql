@@ -16,8 +16,7 @@
     "dev": "tsc --watch",
     "prepare": "tsc",
     "test": "mocha -r source-map-support/register -r extensionless/register lib/**/**test.js",
-    "test-bin": "node bin/toolql.js",
-    "test-direct": "node -r extensionless/register ./lib/toolql-cli.js"
+    "test-bin": "node bin/toolql.js"
   },
   "author": "tim.stewart@toolql.com",
   "repository": "github:toolql/toolql",
