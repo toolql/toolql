@@ -4,7 +4,7 @@
 
 > ## Create A.I. Tools with GraphQL
 
-> #### *Rapidly generate intelligent Agents for business data and operations*
+> #### *Instantly generate intelligent Agents for business data and operations*
 
 Visit https://toolql.com
 
@@ -58,18 +58,20 @@ Alderaan featured in two Star Wars movies, A New Hope and Revenge of the Sith.
 * Explore the included examples, including tools for Github
 
 ```
+> npx toolql -ex github
+
 Hi, I'm your personal Github assistant, how can I help?
 - How many commits have I made since yesterday?
 You've made seven commits to the master branch of `toolql`.
 - How many stars does toolql have?
-The `toolql` project now has 1,234 stars. 
+The `toolql` project now has 123 stars. Would you like to add a star?
+- Yes please
+OK, `toolql` now has 124 stars. Thanks for your support.
 ```
 
-*(Please give us a star and check back soon for updates :-)*
+*(Please do give us a star, and then check back soon to see the difference you make to our documentation :-)*
 
-* Build intelligent tools for your own GraphQL operations!
-
-* Assemble robust schema-driven toolkits across multiple services
+* Create intelligent tools and agents for your own GraphQL operations!
 
 * Enable visiting Agents to transact with your business via [MCP](https://docs.anthropic.com/en/docs/agents-and-tools/mcp)
 
@@ -78,6 +80,8 @@ MCP_PORT=3456
 ```
 
 * Connect with agent designers like Flowise / N8N / CoPilot Studio / ...
+* Assemble robust, schema-driven agentic toolkits across multiple services
+* Build *convergent applications*, combining conventional and conversational user experiences
 
 
 
@@ -85,8 +89,6 @@ MCP_PORT=3456
 
 Accelerate your A.I. journey with GraphQL!
 
-Build convergent applications that combine conventional and conversational user experiences.
-
-Strategy / design / development / training / mentoring / support.
+*Strategy • Design • Development • Mentoring • Training • Support*
 
 https://toolql.com/contact
