@@ -10,14 +10,24 @@ What repositories have I committed to this week?
 
 etc...
 
+In addition to query-based tools such as these, this toolkit includes a mutation to add a star to any project, including special handling for the `toolql` project to indicate an expression of gratitude. Please consider giving us a star, thanks!
+
 ## Config
 
 Add a `.env` file in this directory or use the command line to set the following environment variables:
 
-TOOLQL_GITHUB_ACCESS_TOKEN
+GRAPHQL-BEARER
 
-Generate a token for your Github account:
+This variable sets the `Authorization: bearer` header value for GraphQL API access.
 
-TOOLQL_OPENAI_API_KEY
+Generate a token for your Github account here:
+
+https://github.com/settings/tokens
+
+(Select Classic)
+
+OPENAI_API_KEY
 
 Generate a key for you OpenAI account:
+
+https://platform.openai.com/api-keys

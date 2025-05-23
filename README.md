@@ -15,7 +15,7 @@ Visit https://toolql.com
 Step 1: Describe environment in `.env`
 
 ```properties
-GRAPHQL_API="https://swapi-graphql.netlify.app/graphql"
+GRAPHQL_API=https://swapi-graphql.netlify.app/graphql
 OPENAI_API_KEY=<API_KEY_GOES_HERE>
 ```
 
@@ -69,7 +69,7 @@ The `toolql` project now has 123 stars. Would you like to add a star?
 OK, `toolql` now has 124 stars. Thanks for your support.
 ```
 
-*(Please do give us a star, and then check back soon to see the difference you make to our documentation :-)*
+*(Please do give us a star, and check back soon to see the difference you make to our documentation :-)*
 
 * Create intelligent tools and agents for your own GraphQL operations!
 
