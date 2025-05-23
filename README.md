@@ -80,7 +80,9 @@ MCP_PORT=3456
 ```
 
 * Connect with agent designers like Flowise / N8N / CoPilot Studio / ...
+
 * Assemble robust, schema-driven agentic toolkits across multiple services
+
 * Build *convergent applications*, combining conventional and conversational user experiences
 
 

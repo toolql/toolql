@@ -15,7 +15,7 @@ etc...
 
 ## Config
 
-Add a `.env` file in this directory or use the command line to set the following environment variables:
+Copy the `.env.template` file in this directory to `.env` and configure the following environment variables:
 
 OPENAI_API_KEY
 

@@ -4,17 +4,17 @@ Provides a set of tools to enable an agent to answer questions about your Gihub 
 
 ## You could ask...
 
-How many repositories to I have access to?
+How many repositories do I have access to?
 
 What repositories have I committed to this week?
 
 etc...
 
-In addition to query-based tools such as these, this toolkit includes a mutation to add a star to any project, including special handling for the `toolql` project to indicate an expression of gratitude. Please consider giving us a star, thanks!
+In addition to query-based tools such as these, this toolkit includes a mutation to add a star to any project, including special handling for the `toolql` project to express our gratitude. Please consider giving us a star, thanks!
 
 ## Config
 
-Add a `.env` file in this directory or use the command line to set the following environment variables:
+Copy the `.env.template` file in this directory to `.env` and configure the following environment variables:
 
 GRAPHQL-BEARER
 

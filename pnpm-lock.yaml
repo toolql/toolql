@@ -20,6 +20,12 @@ importers:
       dotenv:
         specifier: ^16.5.0
         version: 16.5.0
+      extensionless:
+        specifier: ^1.9.9
+        version: 1.9.9
+      ts-dedent:
+        specifier: ^2.2.0
+        version: 2.2.0
     devDependencies:
       '@eslint/js':
         specifier: ^9.27.0
@@ -39,9 +45,6 @@ importers:
       eslint:
         specifier: ^9.27.0
         version: 9.27.0
-      extensionless:
-        specifier: ^1.9.9
-        version: 1.9.9
       mocha:
         specifier: ^11.4.0
         version: 11.4.0
@@ -964,6 +967,10 @@ packages:
     engines: {node: '>=18.12'}
     peerDependencies:
       typescript: '>=4.8.4'
+
+  ts-dedent@2.2.0:
+    resolution: {integrity: sha512-q5W7tVM71e2xjHZTlgfTDoPF/SmqKG5hddq9SzR49CH2hayqRKJtQ4mtRlSxKaJlR/+9rEM+mnBHf7I2/BQcpQ==}
+    engines: {node: '>=6.10'}
 
   type-check@0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
@@ -1968,6 +1975,8 @@ snapshots:
   ts-api-utils@2.1.0(typescript@5.8.3):
     dependencies:
       typescript: 5.8.3
+
+  ts-dedent@2.2.0: {}
 
   type-check@0.4.0:
     dependencies:

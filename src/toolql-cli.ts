@@ -1,23 +1,25 @@
 import "dotenv/config"
 import { createInterface } from "node:readline"
-import * as process from "node:process"
 import { exit, stdin, stdout } from "node:process"
 import { StructuredTool } from "@langchain/core/tools"
 import { getLlm } from "./get-llm"
 import { MemorySaver } from "@langchain/langgraph"
 import { createReactAgent } from "@langchain/langgraph/prebuilt"
 import { HumanMessage } from "@langchain/core/messages"
+import dedent from "ts-dedent"
 
 export const main = () => {
-  const openAiApiKey = process.env.OPENAI_API_KEY
-  if (!openAiApiKey)
-    throw new Error("OpenAI API key missing, please set OPENAI_API_KEY")
-
   // TODO: Initialise GraphQL tools
   const tools: StructuredTool[] = []
   const llm = getLlm()
   const checkpointSaver = new MemorySaver()
-  const agent = createReactAgent({ llm, tools, checkpointSaver })
+  // prettier-ignore
+  const prompt = dedent(process.env.TOOLQL_AGENT_PROMPT || `
+    You are an agent provided with tools for working with data and operations.
+    Answer questions using your provided tools wherever appropriate, rather than your general knowledge.
+    Politely avoid answering questions that are not related to your provided tools.
+  `)
+  const agent = createReactAgent({ llm, tools, checkpointSaver, prompt })
   const thread_id = crypto.randomUUID()
 
   const rl = createInterface({

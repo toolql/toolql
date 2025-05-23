@@ -39,6 +39,7 @@
     "@langchain/langgraph": "^0.2.73",
     "@langchain/openai": "^0.5.10",
     "dotenv": "^16.5.0",
-    "extensionless": "^1.9.9"
+    "extensionless": "^1.9.9",
+    "ts-dedent": "^2.2.0"
   }
 }

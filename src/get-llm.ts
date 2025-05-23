@@ -3,6 +3,9 @@ import { ChatOpenAI } from "@langchain/openai"
 
 export type LlmParams = BaseChatModelParams
 
+export const MISSING_API_KEY_ERROR =
+  "OpenAI API key missing, please set OPENAI_API_KEY"
+
 // TODO: Extends to support other parameterised models
 export const getLlm = () => {
   const openAiApiKey = process.env.OPENAI_API_KEY
