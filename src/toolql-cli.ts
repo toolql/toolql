@@ -1,16 +1,28 @@
 import "dotenv/config"
 import { createInterface } from "node:readline"
 import { exit, stdin, stdout } from "node:process"
-import { StructuredTool } from "@langchain/core/tools"
 import { getLlm } from "./get-llm"
 import { MemorySaver } from "@langchain/langgraph"
 import { createReactAgent } from "@langchain/langgraph/prebuilt"
 import { HumanMessage } from "@langchain/core/messages"
 import dedent from "ts-dedent"
+import { readFileSync } from "fs"
+import { toolkit, QLTool, langChainTool } from "./toolkit"
+import { Api } from "./graphqlex"
 
 export const main = () => {
-  // TODO: Initialise GraphQL tools
-  const tools: StructuredTool[] = []
+  // Initialise GraphQL tools
+  const toolsGql = readFileSync("./tools.graphql", "utf8")
+  const url = process.env.GRAPHQL_API
+  const headers: any = {}
+  if (process.env.GRAPHQL_BEARER) {
+    headers.Authorization = `Bearer ${process.env.GRAPHQL_BEARER}`
+  }
+  const api = new Api(url, { headers })
+  const qlTools: QLTool[] = toolkit(toolsGql, api)
+  const langChainTools = qlTools.map(langChainTool)
+
+  // Initialise Agent
   const llm = getLlm()
   const checkpointSaver = new MemorySaver()
   // prettier-ignore
@@ -19,7 +31,12 @@ export const main = () => {
     Answer questions using your provided tools wherever appropriate, rather than your general knowledge.
     Politely avoid answering questions that are not related to your provided tools.
   `)
-  const agent = createReactAgent({ llm, tools, checkpointSaver, prompt })
+  const agent = createReactAgent({
+    llm,
+    tools: langChainTools,
+    checkpointSaver,
+    prompt
+  })
   const thread_id = crypto.randomUUID()
 
   const rl = createInterface({

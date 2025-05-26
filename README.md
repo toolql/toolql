@@ -12,7 +12,7 @@ Visit https://toolql.com
 
 ### Get Started
 
-Step 1: Describe environment in `.env`
+Step 1: Set connections in `.env`
 
 ```properties
 GRAPHQL_API=https://swapi-graphql.netlify.app/graphql

@@ -16,7 +16,7 @@
     "dev": "tsc --watch",
     "prepare": "tsc",
     "test": "mocha -r source-map-support/register -r extensionless/register lib/**/**test.js",
-    "test-bin": "node bin/toolql.js"
+    "test-bin": "cd examples/star-wars && ../../bin/toolql.js"
   },
   "author": "tim.stewart@toolql.com",
   "repository": "github:toolql/toolql",
@@ -24,6 +24,8 @@
   "devDependencies": {
     "@eslint/js": "^9.27.0",
     "@types/chai": "^5.2.2",
+    "@types/cors": "^2.8.18",
+    "@types/express": "^5.0.2",
     "@types/mocha": "^10.0.10",
     "@types/node": "^22.15.21",
     "chai": "^5.2.0",
@@ -38,8 +40,13 @@
     "@langchain/core": "^0.3.56",
     "@langchain/langgraph": "^0.2.73",
     "@langchain/openai": "^0.5.10",
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.5.0",
+    "express": "^5.1.0",
     "extensionless": "^1.9.9",
-    "ts-dedent": "^2.2.0"
+    "graphql": "^16.11.0",
+    "ts-dedent": "^2.2.0",
+    "zod": "^3.25.23"
   }
 }

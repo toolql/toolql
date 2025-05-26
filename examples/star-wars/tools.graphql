@@ -1,0 +1,16 @@
+# Find information about Star Wars movies
+query starWars {
+  allFilms {
+    films {
+      # The title of the film
+      title
+      planetConnection {
+        # A list of planets for this film
+        planets {
+          # Name of the planet
+          name
+        }
+      }
+    }
+  }
+}
