@@ -30,12 +30,9 @@ export const noOpTag = (strings: TemplateStringsArray, ...exps: string[]) => {
  */
 export const gql = noOpTag
 
-export type Fetch = (url: RequestInfo, init?: RequestInit) => Promise<Response>
-
 export type ApiOptions = {
   wsUrl?: string
   headers?: object
-  fetch?: Fetch
   onResponse?: (response: GraphQLResponse) => any
 }
 
@@ -57,7 +54,7 @@ export type SubscriptionDataHandler = (data: any) => any
  * GraphQLEx returns an enhanced version of the original HTTP response
  * for queries and mutations.
  */
-export type GraphQLResponse <T = any> = {
+export type GraphQLResponse<T = any> = {
   /**
    * The original network response.
    */
@@ -136,7 +133,7 @@ export type GraphQLError = {
   /**
    * The associated location in the sent GraphQL operation document
    */
-  locations?: Array<{ line: number, column: number }>
+  locations?: Array<{ line: number; column: number }>
 
   /**
    * The associated position in the returned GraphQL response document as path components
@@ -153,7 +150,6 @@ export type GraphQLError = {
  * Represents a remote GraphQL API connection.
  */
 export class Api {
-
   /**
    * Service URL.
    */
@@ -164,13 +160,6 @@ export class Api {
    * Not necessary if the host and port match the main URL.
    */
   wsUrl: string
-
-  /**
-   * Fetch API implementation.
-   * Set to node-fetch or similar if running in Node.
-   * Defaults to the DOM Fetch API in a browser.
-   */
-  fetch: Fetch
 
   /**
    * Headers applied to all API calls.
@@ -194,30 +183,26 @@ export class Api {
    * Second parameter can specify options object for wsUrl and any additional headers.
    * If the websockets URL is not provided it is derived by replacing the protocol on the http URL.
    */
-  constructor (url: string, apiOptions: string | ApiOptions = {}) {
-    const options: ApiOptions = typeof apiOptions === "string"
-      ? { wsUrl: apiOptions }
-      : apiOptions
-    if (!options.fetch && typeof window === "undefined") {
-      throw new Error("No fetch implementation provided and not operating in browser context")
-    }
-    options.fetch = options.fetch || window.fetch.bind(window)
+  constructor(url: string, apiOptions: string | ApiOptions = {}) {
+    const options: ApiOptions =
+      typeof apiOptions === "string" ? { wsUrl: apiOptions } : apiOptions
     const protocol = url.match(/^(https?):\/\//)[1]
     if (!protocol) throw new Error(`Unexpected API URL [${url}]`)
     const isSecure = protocol.match(/s$/)
 
     this.url = url
-    this.wsUrl = options.wsUrl || [`ws${isSecure ? "s" : ""}:`, url.split("//").slice(1)].join("//")
-    this.fetch = options.fetch
+    this.wsUrl =
+      options.wsUrl ||
+      [`ws${isSecure ? "s" : ""}:`, url.split("//").slice(1)].join("//")
     this.headers = options.headers
     this.onReponse = options.onResponse
   }
 
-  get log () {
+  get log() {
     return this.socket.log
   }
 
-  set log (fn) {
+  set log(fn) {
     if (typeof fn === "function") {
       if (this.socket) this.socket.log = fn
     }
@@ -229,13 +214,22 @@ export class Api {
    * The parameter name `query` contains the GraphQL for either operation,
    * as that is the request body key specified within the GraphQL standard.
    */
-  async run <T = any> (query: string, variables: any = {}): Promise<GraphQLResponse<T>> {
+  async run<T = any>(
+    query: string,
+    variables: any = {}
+  ): Promise<GraphQLResponse<T>> {
     const graphQLResponse = (
       condition: GraphQLResponseCondition,
       { data, error, graphQLErrors }: Partial<GraphQLResponse>
     ) => {
       const result: GraphQLResponse = {
-        net: response, data, condition, error, graphQLErrors, query, variables
+        net: response,
+        data,
+        condition,
+        error,
+        graphQLErrors,
+        query,
+        variables
       }
       if (typeof this.onReponse === "function") {
         this.onReponse(result)
@@ -249,23 +243,27 @@ export class Api {
     try {
       body = JSON.stringify({ query, variables })
     } catch (error) {
-			if (error instanceof Error) {
-				return graphQLResponse(GraphQLResponseCondition.InvalidRequest, { error })
-			}
+      if (error instanceof Error) {
+        return graphQLResponse(GraphQLResponseCondition.InvalidRequest, {
+          error
+        })
+      }
     }
 
     try {
       // Make the call
-      response = await this.fetch(this.url, {
+      response = await fetch(this.url, {
         ...standardOptions,
         headers: { ...standardOptions.headers, ...this.headers },
         body
       })
     } catch (error) {
       // Network call failed
-			if (error instanceof Error) {
-				return graphQLResponse(GraphQLResponseCondition.NetworkCallFailed, { error })
-			}
+      if (error instanceof Error) {
+        return graphQLResponse(GraphQLResponseCondition.NetworkCallFailed, {
+          error
+        })
+      }
     }
 
     let errors: GraphQLError[]
@@ -278,21 +276,31 @@ export class Api {
       data = responseJson.data
     } catch (error) {
       // Response JSON cannot be parsed
-			if (error instanceof Error) {
-				return graphQLResponse(GraphQLResponseCondition.InvalidResponse, { error })
-			}
+      if (error instanceof Error) {
+        return graphQLResponse(GraphQLResponseCondition.InvalidResponse, {
+          error
+        })
+      }
     }
-    const condition = Array.isArray(errors) && errors.length
-      ? [undefined, null].includes(data) ||
-      (typeof data === "object" && Object.keys(data).every(key => [undefined, null].includes(data[key])))
+    const condition =
+      Array.isArray(errors) && errors.length
+        ? [undefined, null].includes(data) ||
+          (typeof data === "object" &&
+            Object.keys(data).every((key) =>
+              [undefined, null].includes(data[key])
+            ))
           ? GraphQLResponseCondition.RequestError
           : GraphQLResponseCondition.FieldError
-      : GraphQLResponseCondition.OK
+        : GraphQLResponseCondition.OK
 
     return graphQLResponse(condition, { data, graphQLErrors: errors })
   }
 
-  subscribe (query: string, variables: object = {}, channelName = randChannelName()): Subscription {
+  subscribe(
+    query: string,
+    variables: object = {},
+    channelName = randChannelName()
+  ): Subscription {
     const message = {
       id: channelName,
       type: "start",
@@ -305,7 +313,9 @@ export class Api {
 
     if (this.socket) {
       if (this.socket.subscriptions[channelName]) {
-        throw new Error(`Subscription already exists for channel [${channelName}]`)
+        throw new Error(
+          `Subscription already exists for channel [${channelName}]`
+        )
       }
       if (this.socket.connected) {
         startSub()
@@ -317,12 +327,14 @@ export class Api {
       if (this.log) this.socket.log = this.log
     }
 
-    const socketSubscription: SocketSubscription = this.socket.subscriptions[channelName] = {}
-		const close = () => {
-			delete this.socket.subscriptions[channelName]
-		}
+    const socketSubscription: SocketSubscription = (this.socket.subscriptions[
+      channelName
+    ] = {})
+    const close = () => {
+      delete this.socket.subscriptions[channelName]
+    }
     const result: Subscription = {
-      onData (handler) {
+      onData(handler) {
         socketSubscription.dataHandler = handler
         return result
       },
@@ -337,7 +349,6 @@ export type SocketSubscription = {
 }
 
 class Socket {
-
   log: (msg: string) => void
   webSocket: WebSocket
   subscriptions: { [id: string]: SocketSubscription }
@@ -347,7 +358,7 @@ class Socket {
   /**
    * Construct a new Socket instance with the given websocket URL
    */
-  constructor (wsUrl: string, headers: object = {}, onConnected = () => {}) {
+  constructor(wsUrl: string, headers: object = {}, onConnected = () => {}) {
     this.connected = false
 
     this.connectedHandlers = onConnected ? [onConnected] : []
@@ -362,20 +373,24 @@ class Socket {
         payload: headers
       }
 
-      this.webSocket.send(JSON.stringify((message)))
+      this.webSocket.send(JSON.stringify(message))
     }
 
-    this.webSocket.onmessage = event => {
+    this.webSocket.onmessage = (event) => {
       const data = JSON.parse(event.data)
       let msg
 
       if (["subscription_fail", "error"].includes(data.type)) {
-        const msg = `GraphQL ${data.type} for channel ${data.id} ${(data?.payload.message) || ""}`
+        const msg = `GraphQL ${data.type} for channel ${data.id} ${data?.payload.message || ""}`
         throw new Error(msg)
       } else if (data.type === "data") {
-        if (this.subscriptions[data.id] && typeof this.subscriptions[data.id].dataHandler === "function") {
+        if (
+          this.subscriptions[data.id] &&
+          typeof this.subscriptions[data.id].dataHandler === "function"
+        ) {
           return this.subscriptions[data.id].dataHandler(data.payload.data)
-        } else msg = `data received for channel [${data.id}] with no subscription handler`
+        } else
+          msg = `data received for channel [${data.id}] with no subscription handler`
       } else if (data.type !== "ka") {
         const messages: { [code: string]: string } = {
           connection_ack: `[${data.id}] connection_ack, the handshake is complete`,
@@ -383,10 +398,15 @@ class Socket {
           subscription_success: `[${data.id}] subscription_success`
         }
         msg = messages[data.type]
-        msg = msg || `unexpected message type [${data.type}] received from WebSocket server`
-        if (data.type === "connection_ack" && typeof onConnected === "function") {
+        msg =
+          msg ||
+          `unexpected message type [${data.type}] received from WebSocket server`
+        if (
+          data.type === "connection_ack" &&
+          typeof onConnected === "function"
+        ) {
           this.connected = true
-          this.connectedHandlers.forEach(connHandler => connHandler())
+          this.connectedHandlers.forEach((connHandler) => connHandler())
         }
       }
 
@@ -425,7 +445,11 @@ export type InputTypeInfoMap = {
  * (i.e. have at least the input object's fields)
  * it is also used as the return type.
  */
-export const trimInput = <T>(proposedInput: T, typeName: string, inputTypeInfoMap: InputTypeInfoMap): T => {
+export const trimInput = <T>(
+  proposedInput: T,
+  typeName: string,
+  inputTypeInfoMap: InputTypeInfoMap
+): T => {
   const inputType = inputTypeInfoMap[typeName]
   if (!inputType) return proposedInput
 
@@ -469,7 +493,9 @@ export const trimInputs = <V>(
     const value = vars[key]
     if (value) {
       if (Array.isArray(value)) {
-        vars[key] = value.map(v => trimInput(v, type, inputTypeInfoMap)) as V[keyof V]
+        vars[key] = value.map((v) =>
+          trimInput(v, type, inputTypeInfoMap)
+        ) as V[keyof V]
       } else if (typeof vars[key] === "object") {
         vars[key] = trimInput(vars[key], type, inputTypeInfoMap)
       }
@@ -485,7 +511,10 @@ export const trimInputs = <V>(
  * on the data object to match each operation
  * while single operation calls attach the result direct to the data object.
  */
-export const promoteResponseData = (response: GraphQLResponse, name: string) => {
+export const promoteResponseData = (
+  response: GraphQLResponse,
+  name: string
+) => {
   response.data = response.data?.[name]
-  response.graphQLErrors?.forEach(e => e.path?.shift())
+  response.graphQLErrors?.forEach((e) => e.path?.shift())
 }

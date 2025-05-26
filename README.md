@@ -46,9 +46,10 @@ Step 3: Run!
 ```
 > npx toolql
 
-Hi, how can I help?
-- Which Star Wars films featured the planet Alderaan?
-Alderaan featured in two Star Wars movies, A New Hope and Revenge of the Sith.
+Hi there, how can I help?
+- How many movies has Alderaan been in?
+Alderaan has been featured in two Star Wars movies: "A New Hope" and "Revenge of the Sith."
+
 ```
 
 
