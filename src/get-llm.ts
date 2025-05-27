@@ -9,8 +9,7 @@ export const MISSING_API_KEY_ERROR =
 // TODO: Extends to support other parameterised models
 export const getLlm = () => {
   const openAiApiKey = process.env.OPENAI_API_KEY
-  if (!openAiApiKey)
-    throw new Error("OpenAI API key missing, please set OPENAI_API_KEY")
+  if (!openAiApiKey) throw new Error(MISSING_API_KEY_ERROR)
 
   const model = new ChatOpenAI({
     model: "gpt-4o",

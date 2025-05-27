@@ -1,0 +1,27 @@
+# Find the ID of a Github repository
+query getRepositoryId(
+  # Repository name
+  $name: String!,
+  # Owner of the repository
+  $owner: String!
+) {
+  repository(name: $name, owner: $owner) {
+    # Repository ID
+    id
+  }
+}
+
+# Add a star to a repository given its ID
+mutation starRepo (
+  # The Respoitory ID
+  $id: ID!
+) {
+  addStar(input: {
+    starrableId: $id
+  }) {
+    starrable {
+      # Updated number of stars for the repository
+      stargazerCount
+    }
+  }
+}
