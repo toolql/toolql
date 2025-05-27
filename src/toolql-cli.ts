@@ -7,7 +7,7 @@ import { createReactAgent } from "@langchain/langgraph/prebuilt"
 import { HumanMessage } from "@langchain/core/messages"
 import { dedent } from "ts-dedent"
 import { readFileSync } from "fs"
-import { toolkit, QLTool, langChainTool } from "./toolkit"
+import { toolkit, QLTool, langChainTool } from "./toolql"
 import { Api } from "./graphqlex"
 
 export const main = () => {
@@ -45,7 +45,9 @@ export const main = () => {
     prompt: "- "
   })
 
-  console.log("Hi there, how can I help?")
+  const message =
+    process.env.TOOLQL_AGENT_MESSAGE || "Hi there, how can I help?"
+  console.log(message)
   rl.prompt()
 
   rl.on("line", async (line) => {

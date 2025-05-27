@@ -56,7 +56,7 @@ Alderaan has been featured in two Star Wars movies: "A New Hope" and "Revenge of
 
 ### Next Steps
 
-* Explore the included examples, including tools for Github
+* Explore included examples, including the Github assistant
 
 ```
 > npx toolql -ex github
@@ -80,7 +80,9 @@ OK, `toolql` now has 124 stars. Thanks for your support.
 MCP_PORT=3456
 ```
 
-* Connect with agent designers like Flowise / N8N / CoPilot Studio / ...
+* Connect with visual agent designers like Flowise / N8N / CoPilot Studio / ...
+
+![img.png](res/flowise.png)
 
 * Assemble robust, schema-driven agentic toolkits across multiple services
 

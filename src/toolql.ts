@@ -86,7 +86,9 @@ export const toolkit = (graphql: string, api: Api): QLTool[] => {
       .join("\n\n")
 
   for (const def of doc.definitions) {
-    const graphql = def.loc.source.body
+    const { start, end } = def.loc
+    const graphql = def.loc.source.body.slice(start, end)
+    console.log(graphql)
     if (def.kind === "FragmentDefinition") {
       const name = def.name.value
       fragments[name] = {
@@ -109,13 +111,11 @@ export const toolkit = (graphql: string, api: Api): QLTool[] => {
         graphql
       }
 
-      tool.fn = (vars: any) => {}
-
       for (const varDef of def.variableDefinitions) {
         const name = varDef.variable.name.value
-        const description = getComment(def.loc)
+        const description = getComment(varDef.loc)
         tool.params.push({
-          name: name,
+          name,
           description,
           // TODO: Get type and assign appropriately
           type: z.string()
@@ -143,7 +143,9 @@ export const langChainTool = (tool: QLTool): DynamicStructuredTool => {
   return new DynamicStructuredTool({
     name: tool.name,
     description: tool.description,
-    schema: z.object({}),
+    schema: z.object(
+      tool.params.reduce((o, i) => ({ ...o, [i.name]: i.type }), {})
+    ),
     func: tool.fn
   })
 }

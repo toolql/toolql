@@ -1,7 +1,7 @@
 {
   "name": "toolql",
   "description": "A.I. for GraphQL",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "type": "module",
   "main": "lib/toolql.js",
   "types": "lib/toolql.d.ts",
@@ -16,7 +16,8 @@
     "dev": "tsc --watch",
     "prepare": "tsc",
     "test": "mocha -r source-map-support/register -r extensionless/register lib/**/**test.js",
-    "test-bin": "cd examples/star-wars && ../../bin/toolql.js"
+    "test-github": "cd examples/github && ../../bin/toolql.js",
+    "test-star-wars": "cd examples/star-wars && ../../bin/toolql.js"
   },
   "author": "tim.stewart@toolql.com",
   "repository": "github:toolql/toolql",
