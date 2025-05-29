@@ -74,6 +74,9 @@ const getZodType = (node: { type?: TypeNode; name?: NameNode }) => {
     return z.number()
   } else if (name.match(/(boolean)/i)) {
     return z.boolean()
+  } else if (name.match(/datetime/i)) {
+    // TODO: Should be changed to z.iso.datetime() once we can properly import Zod V4
+    return z.string()
   } else {
     // TODO: Support object types
     throw new Error(dedent`

@@ -24,7 +24,7 @@ Generate a token for your Github account here:
 
 https://github.com/settings/tokens
 
-(Select Classic)
+(Select Classic, scopes at least `repo` and `read:org`)
 
 OPENAI_API_KEY
 

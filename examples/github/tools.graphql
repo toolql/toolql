@@ -52,3 +52,50 @@ query repoSearch(
     }
   }
 }
+
+# Get information about the user's commit activity for the previous week.
+# The resulting commit count report is broken down by date and named repository.
+query weeklyCommits(
+  # Provide a date seven days before today
+  $from: DateTime
+) {
+  viewer {
+    contributionsCollection(from: $from) {
+      commitContributionsByRepository {
+        contributions(first: 50) {
+          nodes {
+            # The date of a set of commits
+            occurredAt
+            repository {
+              # The repository name
+              name
+            }
+            # The number of commits on this repository for this day
+            commitCount
+          }
+        }
+      }
+    }
+  }
+}
+
+# Find information about a user's repository access. Results will include the user's own repositories and any others they have access to broken down by organization.
+query myRepos {
+  viewer {
+    repositories(first: 50) {
+      nodes {
+        name
+      }
+    }
+    organizations(first: 50) {
+      nodes {
+        name
+        repositories(first: 50) {
+          nodes {
+            name
+          }
+        }
+      }
+    }
+  }
+}
