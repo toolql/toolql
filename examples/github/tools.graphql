@@ -25,3 +25,30 @@ mutation starRepo (
     }
   }
 }
+
+# Find repositories that match a given search term
+query repoSearch(
+  # The term to search for
+  $query: String!,
+  # The maximum number of results - defaults to 50
+  $maxResults: Int = 50
+) {
+  search(
+    query: $query,
+    type: REPOSITORY,
+    first: $maxResults
+  ) {
+    nodes {
+      ... on Repository {
+        # Name of the repository
+        name
+        owner {
+          # ID of the repository owner
+          id
+        }
+        # ID of the repository
+        id
+      }
+    }
+  }
+}

@@ -1,17 +1,21 @@
 import {
   type DocumentNode,
+  Location,
+  NameNode,
   type OperationDefinitionNode,
   parse,
   Token,
-  Location
+  TypeNode
 } from "graphql/language"
 import z from "zod"
 import { DynamicStructuredTool } from "@langchain/core/tools"
 import { Api } from "./graphqlex"
+import { dedent } from "ts-dedent"
 
 /**
- * ToolQL's tool data structure, convertible to structures for various
- * A.I. agent environments such as LangChain, MCP, etc.
+ * Structure for GraphQL-based tools,
+ * convertible for use within various A.I. agent environments,
+ * such as LangChain, MCP, etc.
  */
 export type QLTool = {
   name: string
@@ -54,6 +58,29 @@ const parseComments = (ast: DocumentNode) => {
   }
 
   return comments
+}
+
+// Get the Zod type of the underlying primitive type
+// Initially supports only vars of type string, number or boolean - see TODOs
+const getZodType = (node: { type?: TypeNode; name?: NameNode }) => {
+  // TODO: Handle list types and nullability
+  while (node.type) {
+    node = node.type
+  }
+  const name = node.name.value
+  if (name.match(/(string|id)/i)) {
+    return z.string()
+  } else if (name.match(/(float|int)/i)) {
+    return z.number()
+  } else if (name.match(/(boolean)/i)) {
+    return z.boolean()
+  } else {
+    // TODO: Support object types
+    throw new Error(dedent`
+      Unsupported type "${name}".
+      Please refactor tools with parameters of type String, ID, Float, Int or Boolean.
+    `)
+  }
 }
 
 export const toolkit = (graphql: string, api: Api): QLTool[] => {
@@ -114,11 +141,11 @@ export const toolkit = (graphql: string, api: Api): QLTool[] => {
       for (const varDef of def.variableDefinitions) {
         const name = varDef.variable.name.value
         const description = getComment(varDef.loc)
+        const type = getZodType(varDef)
         tool.params.push({
           name,
           description,
-          // TODO: Get type and assign appropriately
-          type: z.string()
+          type
         })
       }
 
