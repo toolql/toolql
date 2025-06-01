@@ -62,12 +62,12 @@ Alderaan has been featured in two Star Wars movies: "A New Hope" and "Revenge of
 > npx toolql -ex github
 
 Hi, I'm your personal Github assistant, how can I help?
-- How many commits have I made since yesterday?
-You've made seven commits to the master branch of `toolql`.
-- How many stars does toolql have?
-The `toolql` project now has 123 stars. Would you like to add a star?
-- Yes please
-OK, `toolql` now has 124 stars. Thanks for your support.
+- How many repositories do I currently have access to?
+You currently have access to a total of 71 repositories. This includes your own repositories and those you have access to through various organizations.
+- How many organizations does that cover?
+You have access to repositories across 5 organizations.
+- Add a star to the toolql respository
+Thank you for giving a star to the "toolql" repository! The repository now has 1 star. We appreciate your support!
 ```
 
 *(Please do give us a star, and check back soon to see the difference you make to our documentation :-)*

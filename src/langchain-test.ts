@@ -17,7 +17,7 @@ describe("LangChain Tool Definition", () => {
       }),
       func: toolFn
     })
-    const result = dstTool.invoke({ a: 4, b: 7 })
-    expect(result).to.equal(11)
+    const result = await dstTool.invoke({ a: 4, b: 7 })
+    expect(result).to.equal("11")
   })
 })

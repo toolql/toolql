@@ -13,7 +13,7 @@
     "toolql": "./bin/toolql.js"
   },
   "scripts": {
-    "dev": "tsc --watch",
+    "dev": "rm -rf ./lib && tsc --watch",
     "prepare": "tsc",
     "test": "mocha -r source-map-support/register -r extensionless/register lib/**/**test.js",
     "test-github": "cd examples/github && ../../bin/toolql.js",

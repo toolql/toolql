@@ -1,17 +1,19 @@
-# Find the ID of a Github repository
+# Find the ID amd star count of a Github repository
 query getRepositoryId(
   # Repository name
   $name: String!,
-  # Owner of the repository
+  # Owner of the repository. If not specified, and the repository is toolql, then the owner is toolql.
   $owner: String!
 ) {
   repository(name: $name, owner: $owner) {
     # Repository ID
     id
+    # Number of stars for the repository
+    stargazerCount
   }
 }
 
-# Add a star to a repository given its ID
+# Add a star to a repository given its ID. Upon completion inform the user of the updated number of stars for the repository, and if the repository name is "toolql", express thanks to the user for giving us a star.
 mutation starRepo (
   # The Repository ID
   $id: ID!

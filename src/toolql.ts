@@ -20,9 +20,9 @@ import { dedent } from "ts-dedent"
 export type QLTool = {
   name: string
   description: string
-  params: QLToolParam[]
-  graphql: string
-  fragmentNames: string[]
+  params?: QLToolParam[]
+  graphql?: string
+  fragmentNames?: string[]
   fn?: (...args: any[]) => any
 }
 
@@ -118,7 +118,6 @@ export const toolkit = (graphql: string, api: Api): QLTool[] => {
   for (const def of doc.definitions) {
     const { start, end } = def.loc
     const graphql = def.loc.source.body.slice(start, end)
-    console.log(graphql)
     if (def.kind === "FragmentDefinition") {
       const name = def.name.value
       fragments[name] = {
@@ -174,7 +173,13 @@ export const langChainTool = (tool: QLTool): DynamicStructuredTool => {
     name: tool.name,
     description: tool.description,
     schema: z.object(
-      tool.params.reduce((o, i) => ({ ...o, [i.name]: i.type }), {})
+      (tool.params || []).reduce(
+        (o, p) => ({
+          ...o,
+          [p.name]: p.type.describe(p.description)
+        }),
+        {}
+      )
     ),
     func: tool.fn
   })
