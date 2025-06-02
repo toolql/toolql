@@ -1,5 +1,5 @@
 import { expect } from "chai"
-import { getLlm, MISSING_API_KEY_ERROR } from "./get-llm"
+import { getLlm, MISSING_API_KEY_ERROR } from "./llm/get-llm"
 import { configDotenv } from "dotenv"
 
 describe("ToolQL Test", () => {

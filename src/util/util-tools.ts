@@ -1,4 +1,4 @@
-import { QLTool } from "./toolql"
+import { QLTool } from "../toolql"
 
 export const currentDateTime: QLTool = {
   name: "currentDateTime",

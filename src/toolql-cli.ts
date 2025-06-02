@@ -1,14 +1,15 @@
 import "dotenv/config"
 import { createInterface } from "node:readline"
 import { exit, stdin, stdout } from "node:process"
-import { getLlm } from "./get-llm"
+import { getLlm } from "./llm/get-llm"
 import { MemorySaver } from "@langchain/langgraph"
 import { createReactAgent } from "@langchain/langgraph/prebuilt"
 import { HumanMessage } from "@langchain/core/messages"
 import { dedent } from "ts-dedent"
 import { readFileSync } from "fs"
-import { toolkit, QLTool, langChainTool } from "./toolql"
-import { Api } from "./graphqlex"
+import { toolkit, QLTool } from "./toolql"
+import { Api } from "./graphql/graphqlex"
+import { langChainTool } from "./langchain/langchain-agent"
 
 export const main = () => {
   // Initialise GraphQL tools

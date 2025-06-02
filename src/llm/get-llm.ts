@@ -1,4 +1,7 @@
-import { BaseChatModelParams } from "@langchain/core/dist/language_models/chat_models"
+import {
+  BaseChatModel,
+  BaseChatModelParams
+} from "@langchain/core/dist/language_models/chat_models"
 import { ChatOpenAI } from "@langchain/openai"
 
 export type LlmParams = BaseChatModelParams
@@ -7,7 +10,7 @@ export const MISSING_API_KEY_ERROR =
   "OpenAI API key missing, please set OPENAI_API_KEY"
 
 // TODO: Extends to support other parameterised models
-export const getLlm = () => {
+export const getLlm = (): BaseChatModel => {
   const openAiApiKey = process.env.OPENAI_API_KEY
   if (!openAiApiKey) throw new Error(MISSING_API_KEY_ERROR)
 

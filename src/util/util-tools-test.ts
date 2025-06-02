@@ -1,6 +1,6 @@
-import { currentDateTime } from "./basic-tools"
-import { langChainTool } from "./toolql"
+import { currentDateTime } from "./util-tools"
 import { expect } from "chai"
+import { langChainTool } from "../langchain/langchain-agent"
 
 describe("Basic tools", () => {
   it("Should be able to determine the current time", async () => {

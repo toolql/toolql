@@ -8,8 +8,7 @@ import {
   TypeNode
 } from "graphql/language"
 import z from "zod"
-import { DynamicStructuredTool } from "@langchain/core/tools"
-import { Api } from "./graphqlex"
+import { Api } from "./graphql/graphqlex"
 import { dedent } from "ts-dedent"
 
 /**
@@ -166,23 +165,6 @@ export const toolkit = (graphql: string, api: Api): QLTool[] => {
   }
 
   return tools
-}
-
-export const langChainTool = (tool: QLTool): DynamicStructuredTool => {
-  return new DynamicStructuredTool({
-    name: tool.name,
-    description: tool.description,
-    schema: z.object(
-      (tool.params || []).reduce(
-        (o, p) => ({
-          ...o,
-          [p.name]: p.type.describe(p.description)
-        }),
-        {}
-      )
-    ),
-    func: tool.fn
-  })
 }
 
 export const mcpTool = (qlTool: QLTool) => {

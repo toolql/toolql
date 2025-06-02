@@ -1,4 +1,4 @@
-import { QLTool } from "./toolql"
+import { QLTool } from "../toolql"
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 
 export const mcpServer = (name: string, tools: QLTool[]): McpServer => {
