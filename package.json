@@ -17,6 +17,7 @@
     "prepare": "tsc",
     "test": "mocha -r source-map-support/register -r extensionless/register lib/**/**test.js",
     "test-github": "cd examples/github && ../../bin/toolql.js",
+    "test-github-mcp": "cd examples/github && MCP_PORT=3456 ../../bin/toolql.js",
     "test-star-wars": "cd examples/star-wars && ../../bin/toolql.js"
   },
   "author": "tim.stewart@toolql.com",

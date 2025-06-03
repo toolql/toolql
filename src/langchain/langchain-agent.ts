@@ -5,20 +5,13 @@ import { BaseChatModel } from "@langchain/core/dist/language_models/chat_models"
 import { MemorySaver } from "@langchain/langgraph"
 import { dedent } from "ts-dedent"
 import { createReactAgent } from "@langchain/langgraph/prebuilt"
+import { zodParams } from "../util/zod-params"
 
 export const langChainTool = (tool: QLTool): DynamicStructuredTool => {
   return new DynamicStructuredTool({
     name: tool.name,
     description: tool.description,
-    schema: z.object(
-      (tool.params || []).reduce(
-        (o, p) => ({
-          ...o,
-          [p.name]: p.type.describe(p.description)
-        }),
-        {}
-      )
-    ),
+    schema: zodParams(tool.params),
     func: tool.fn
   })
 }

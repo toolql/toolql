@@ -3,7 +3,7 @@ import cors from "cors"
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js"
 
-export const serve = (mcpServer: McpServer) => {
+export const serve = (mcpServer: McpServer, port: number) => {
   const transports: Record<string, SSEServerTransport> = {}
 
   const app = express()
@@ -40,5 +40,6 @@ export const serve = (mcpServer: McpServer) => {
     }
   })
 
-  app.listen(3002)
+  app.listen(port)
+  console.log(`ToolQL MCP server listening on ${port}`)
 }

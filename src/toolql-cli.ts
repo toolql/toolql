@@ -7,6 +7,8 @@ import { readFileSync } from "fs"
 import { QLTool, toolkit } from "./toolql"
 import { Api } from "./graphql/graphqlex"
 import { langchainAgent } from "./langchain/langchain-agent"
+import { mcpServer } from "./mcp/mcp-server"
+import { serve } from "./mcp/sse-server"
 
 export const main = () => {
   // Initialise GraphQL tools
@@ -18,44 +20,51 @@ export const main = () => {
   }
   const api = new Api(url, { headers })
   const qlTools: QLTool[] = toolkit(toolsGql, api)
+  const port = parseInt(process.env.MCP_PORT || "0")
 
-  // Initialise Agent
-  const llm = getLlm()
-  const agent = langchainAgent(qlTools, llm)
-  const thread_id = crypto.randomUUID()
+  if (port) {
+    // Initialise MCP Server
+    const server = mcpServer("ToolQL MCP Server", qlTools)
+    serve(server, port)
+  } else {
+    // Initialise Agent
+    const llm = getLlm()
+    const agent = langchainAgent(qlTools, llm)
+    const thread_id = crypto.randomUUID()
 
-  const rl = createInterface({
-    input: stdin,
-    output: stdout,
-    prompt: "- "
-  })
+    const rl = createInterface({
+      input: stdin,
+      output: stdout,
+      prompt: "- "
+    })
 
-  const message =
-    process.env.TOOLQL_AGENT_MESSAGE || "Hi there, how can I help?"
-  console.log(message)
-  rl.prompt()
-
-  rl.on("line", async (line) => {
-    const result = await agent.invoke(
-      { messages: [new HumanMessage(line)] },
-      { configurable: { thread_id } }
-    )
-    // Tried the following for streaming without success
-    // for await (const chunk of result) {
-    //   process.stdout.write(chunk.toString())
-    // }
-    const answer = result.messages[result.messages.length - 1].content
-    console.log(answer)
-
+    const message =
+      process.env.TOOLQL_AGENT_MESSAGE || "Hi there, how can I help?"
+    console.log(message)
     rl.prompt()
-  }).on("close", () => {
-    console.log("")
-    console.log("Thanks, see you soon!")
-    console.log(
-      "For all your GraphQL / A.I. integration needs visit https://toolql.com"
-    )
-    exit(0)
-  })
+
+    rl.on("line", async (line) => {
+      const result = await agent.invoke(
+        { messages: [new HumanMessage(line)] },
+        { configurable: { thread_id } }
+      )
+      // Tried the following for streaming without success
+      // for await (const chunk of result) {
+      //   process.stdout.write(chunk.toString())
+      // }
+      const answer = result.messages[result.messages.length - 1].content
+      console.log(answer)
+
+      rl.prompt()
+    }).on("close", () => {
+      console.log("")
+      console.log("Thanks, see you soon!")
+      console.log(
+        "For all your GraphQL / A.I. integration needs visit https://toolql.com"
+      )
+      exit(0)
+    })
+  }
 }
 
 main()
