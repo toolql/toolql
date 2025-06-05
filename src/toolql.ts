@@ -17,24 +17,73 @@ import { dedent } from "ts-dedent"
  * such as LangChain, MCP, etc.
  */
 export type QLTool = {
+  /**
+   * Tool name, matching GraphQL operation source name.
+   */
   name: string
+
+  /**
+   * Tool usage description, parsed from GraphQL source comment.
+   */
   description: string
+
+  /**
+   * Tool call parameters.
+   */
   params?: QLToolParam[]
+
+  /**
+   * GraphQL operation source.
+   */
   graphql?: string
+
+  /**
+   * Names of referenced fragments.
+   */
   fragmentNames?: string[]
-  fn?: (...args: any[]) => any
+
+  /**
+   * Tool action function.
+   */
+  fn?: (args: any) => any
+
+  /**
+   * Tool version for MCP. Defaults to 1.0.0.
+   */
+  version?: string
 }
 
 export type QLFragment = {
+  /**
+   * Name of fragment in GraphQL source.
+   */
   name: string
+
+  /**
+   * GraphQL fragment source.
+   */
   graphql: string
+
+  /**
+   * Names of other fragments referenced from this one.
+   */
   fragmentNames: string[]
 }
 
 export type QLToolParam = {
+  /**
+   * Name of the parameter, defined in GraphQL source.
+   */
   name: string
+
+  /**
+   * Description, parsed from comment in GraphQL source.
+   */
   description: string
-  // TODO: Establish type structure
+
+  /**
+   * GraphQL type name.
+   */
   type: any
 }
 
@@ -85,6 +134,10 @@ const getZodType = (node: { type?: TypeNode; name?: NameNode }) => {
   }
 }
 
+/**
+ * Obtain a collection of tools for the given GraphQL source,
+ * connected to the given API.
+ */
 export const toolkit = (graphql: string, api: Api): QLTool[] => {
   const doc: DocumentNode = parse(graphql)
 
@@ -165,9 +218,4 @@ export const toolkit = (graphql: string, api: Api): QLTool[] => {
   }
 
   return tools
-}
-
-export const mcpTool = (qlTool: QLTool) => {
-  console.log(qlTool)
-  return {}
 }
