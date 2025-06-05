@@ -1,4 +1,4 @@
-![](./res/toolql-logo-close.png)
+![Logo](./res/toolql-logo-close.png)
 
 
 
@@ -82,9 +82,9 @@ MCP_PORT=3456
 
 * Connect with visual agent designers like Flowise / N8N / CoPilot Studio / ...
 
-![img.png](res/flowise.png)
+![Flowise](res/flowise.png)
 
-![img.png](res/n8n.png)
+![N8N](res/n8n.png)
 
 * Use your tools in LangChain agents via the ES6 Node API
 
