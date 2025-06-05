@@ -1,7 +1,7 @@
 {
   "name": "toolql",
   "description": "A.I. for GraphQL",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "type": "module",
   "main": "lib/toolql.js",
   "types": "lib/toolql.d.ts",
