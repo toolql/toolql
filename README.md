@@ -84,6 +84,10 @@ MCP_PORT=3456
 
 ![img.png](res/flowise.png)
 
+![img.png](res/n8n.png)
+
+* Use your tools in LangChain agents via the ES6 Node API
+
 * Assemble robust, schema-driven agentic toolkits across multiple services
 
 * Build *convergent applications*, combining conventional and conversational user experiences
