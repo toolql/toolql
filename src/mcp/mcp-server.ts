@@ -1,6 +1,6 @@
 import { QLTool } from "../toolql"
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
-import { zodParams } from "../util/zod-params"
+import { paramTypes } from "../util/param-types"
 
 export const mcpServer = (name: string, tools: QLTool[]): McpServer => {
   // Create an MCP server
@@ -11,7 +11,8 @@ export const mcpServer = (name: string, tools: QLTool[]): McpServer => {
   })
 
   for (const tool of tools) {
-    server.tool(tool.name, tool.description, zodParams(tool.params), tool.fn)
+    const params = paramTypes(tool.params)
+    server.tool(tool.name, tool.description, params, tool.fn)
   }
 
   return server
