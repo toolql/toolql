@@ -9,10 +9,27 @@ import { Api } from "./graphql/graphqlex"
 import { langchainAgent } from "./langchain/langchain-agent"
 import { mcpServer } from "./mcp/mcp-server"
 import { serve } from "./mcp/sse-server"
+import { configDotenv } from "dotenv"
+import path from "node:path"
 
 export const main = () => {
+  let wd = process.cwd()
+
+  // If running an example, change the working directory and load local environment vars
+  const exIndex = process.argv.indexOf("-ex")
+  if (exIndex >= 0) {
+    wd = path.resolve(
+      import.meta.dirname,
+      "../examples",
+      process.argv[exIndex + 1]
+    )
+    configDotenv({
+      path: path.resolve(wd, ".env")
+    })
+  }
+
   // Initialise GraphQL tools
-  const toolsGql = readFileSync("./tools.graphql", "utf8")
+  const toolsGql = readFileSync(path.resolve(wd, "tools.graphql"), "utf8")
   const url = process.env.GRAPHQL_API
   const headers: any = {}
   if (process.env.GRAPHQL_BEARER) {
