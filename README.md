@@ -4,13 +4,31 @@
 
 > ## Create A.I. Tools with GraphQL
 
-> #### *Instantly generate intelligent Agents for business data and operations*
+> #### *Instantly generate Intelligent Agents for business information and operations*
 
 Visit https://toolql.com
 
 
 
-### Get Started
+### Try an example - a simple Github assistant
+
+```
+> npx toolql -ex github
+
+Hi, I'm your personal Github assistant, how can I help?
+- How many repositories do I currently have access to?
+You currently have access to a total of 71 repositories. This includes your own repositories and those you have access to through various organizations.
+- How many organizations does that cover?
+You have access to repositories across 5 organizations.
+- Add a star to the toolql respository
+Thank you for giving a star to the "toolql" repository! The repository now has 1 star. We appreciate your support!
+```
+
+*(Please do give us a star, and check back soon to see the difference you make to our documentation :-)*
+
+
+
+### Three steps to a GraphQL-powered AI Agent
 
 Step 1: Set connections in `.env`
 
@@ -56,23 +74,9 @@ Alderaan has been featured in two Star Wars movies: "A New Hope" and "Revenge of
 
 ### Next Steps
 
-* Explore included examples, including the Github assistant
+* Create *intelligent tools* and *autonomous agents* agents for your own GraphQL operations!
 
-```
-> npx toolql -ex github
-
-Hi, I'm your personal Github assistant, how can I help?
-- How many repositories do I currently have access to?
-You currently have access to a total of 71 repositories. This includes your own repositories and those you have access to through various organizations.
-- How many organizations does that cover?
-You have access to repositories across 5 organizations.
-- Add a star to the toolql respository
-Thank you for giving a star to the "toolql" repository! The repository now has 1 star. We appreciate your support!
-```
-
-*(Please do give us a star, and check back soon to see the difference you make to our documentation :-)*
-
-* Create intelligent tools and agents for your own GraphQL operations!
+* Use your tools in custom LangChain agents via the ES6 Node API
 
 * Enable visiting Agents to transact with your business via [MCP](https://docs.anthropic.com/en/docs/agents-and-tools/mcp)
 
@@ -85,8 +89,6 @@ MCP_PORT=3456
 ![Flowise](res/flowise.png)
 
 ![N8N](res/n8n.png)
-
-* Use your tools in LangChain agents via the ES6 Node API
 
 * Assemble robust, schema-driven agentic toolkits across multiple services
 
