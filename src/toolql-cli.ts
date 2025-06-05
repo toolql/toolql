@@ -11,21 +11,30 @@ import { mcpServer } from "./mcp/mcp-server"
 import { serve } from "./mcp/sse-server"
 import { configDotenv } from "dotenv"
 import path from "node:path"
+import { copyFileSync } from "node:fs"
 
 export const main = () => {
   let wd = process.cwd()
 
-  // If running an example, change the working directory and load local environment vars
+  // If running an example, change the working directory and load nested environment vars
   const exIndex = process.argv.indexOf("-ex")
   if (exIndex >= 0) {
-    wd = path.resolve(
-      import.meta.dirname,
-      "../examples",
-      process.argv[exIndex + 1]
-    )
+    const modDir = import.meta.dirname
+    wd = path.resolve(modDir, "../examples", process.argv[exIndex + 1])
     configDotenv({
-      path: path.resolve(wd, ".env")
+      path: [
+        path.resolve(process.cwd(), ".env"),
+        path.resolve(wd, ".env.template"),
+        path.resolve(wd, ".env")
+      ]
     })
+    if (!(process.env.MCP_PORT || process.env.OPENAI_API_KEY)) {
+      copyFileSync(path.resolve(modDir, "../.env.template"), ".env")
+      console.log(
+        "Created .env file in the current directory. Please configure values."
+      )
+      return
+    }
   }
 
   // Initialise GraphQL tools

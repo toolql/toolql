@@ -12,13 +12,3 @@ What Star Wars movies did Chewbacca appear in?
 What planet features in the most movies?
 
 etc...
-
-## Config
-
-Copy the `.env.template` file in this directory to `.env` and configure the following environment variables:
-
-OPENAI_API_KEY
-
-Generate a key for you OpenAI account:
-
-https://platform.openai.com/api-keys
