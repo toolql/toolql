@@ -6,13 +6,24 @@ export const mcpServer = (name: string, tools: QLTool[]): McpServer => {
   // Create an MCP server
   const server = new McpServer({
     name,
-    // TODO: Handle MCP versioning in the broader context of tool and API versioning
+    // TODO: Handle MCP versioning in the broader context of tool versioning
     version: "1.0.0"
   })
 
   for (const tool of tools) {
     const params = paramTypes(tool.params)
-    server.tool(tool.name, tool.description, params, tool.fn)
+    const fn: (args: any) => any = async (vars: any) => {
+      const response = await tool.fn(vars)
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(response)
+          }
+        ]
+      }
+    }
+    server.tool(tool.name, tool.description, params, fn)
   }
 
   return server
