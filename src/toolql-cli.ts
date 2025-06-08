@@ -86,7 +86,7 @@ export const main = () => {
       console.log("")
       console.log("Thanks, see you soon!")
       console.log(
-        "For all your GraphQL / A.I. integration needs visit https://toolql.com"
+        "For all your GraphQL / AI integration needs visit https://toolql.com"
       )
       exit(0)
     })

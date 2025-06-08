@@ -1,8 +1,8 @@
-![Logo](./res/toolql-logo-close.png)
+![Logo](./res/toolql-logo.png)
 
 
 
-> ## Create A.I. Tools with GraphQL
+> ## Create AI Tools with GraphQL
 
 > #### *Instantly generate Intelligent Agents for business information and operations*
 
@@ -76,7 +76,7 @@ Alderaan has been featured in two Star Wars movies: "A New Hope" and "Revenge of
 
 * Create *intelligent tools* and *autonomous agents* agents for your own GraphQL operations!
 
-* Use your tools in custom LangChain agents via the ES6 Node API
+* Use your tools in custom agents via the TypeScript API and LangChain
 
 * Enable visiting Agents to transact with your business via [MCP](https://docs.anthropic.com/en/docs/agents-and-tools/mcp)
 
@@ -84,7 +84,7 @@ Alderaan has been featured in two Star Wars movies: "A New Hope" and "Revenge of
 MCP_PORT=3456
 ```
 
-* Connect with visual agent designers like Flowise / N8N / CoPilot Studio / ...
+* Integrate with visual agent designers like Flowise / N8N / CoPilot Studio / ...
 
 ![Flowise](res/flowise.png)
 
@@ -98,7 +98,7 @@ MCP_PORT=3456
 
 ### Contact Us
 
-Accelerate your A.I. journey with GraphQL!
+Accelerate your AI journey with ToolQL!
 
 *Strategy • Design • Development • Mentoring • Training • Support*
 
