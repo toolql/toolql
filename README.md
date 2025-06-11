@@ -10,7 +10,7 @@ Visit https://toolql.com
 
 
 
-### Try an example - a simple [Github assistant](#github-assistant)
+### Try an example - a simple Github assistant
 
 ```
 > npx toolql -ex github
@@ -28,7 +28,7 @@ Thank you for giving a star to the "toolql" repository! The repository now has 1
 
 
 
-### [Three steps to a GraphQL-powered AI Agent](#3-steps-to-an-agent)
+### Three steps to a GraphQL-powered AI Agent
 
 Step 1: Set connections in `.env`
 
@@ -72,7 +72,7 @@ Alderaan has been featured in two Star Wars movies: "A New Hope" and "Revenge of
 
 
 
-### Next Steps[](#next-steps)
+### Next Steps
 
 * Create *intelligent tools* and *autonomous agents* agents for your own GraphQL operations!
 
