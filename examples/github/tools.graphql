@@ -1,4 +1,4 @@
-# Find the ID amd star count of a Github repository
+# Find the ID and star count of a Github repository
 query getRepositoryId(
   # Repository name
   $name: String!,

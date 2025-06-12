@@ -3,42 +3,74 @@ import { createInterface } from "node:readline"
 import { exit, stdin, stdout } from "node:process"
 import { getLlm } from "./llm/get-llm"
 import { HumanMessage } from "@langchain/core/messages"
-import { readFileSync } from "fs"
+import { readFileSync, existsSync } from "fs"
 import { QLTool, toolkit } from "./toolql"
 import { Api } from "./graphql/graphqlex"
 import { langchainAgent } from "./langchain/langchain-agent"
 import { mcpServer } from "./mcp/mcp-server"
 import { serve } from "./mcp/sse-server"
 import { configDotenv } from "dotenv"
-import path from "node:path"
+import { resolve, join } from "node:path"
 import { copyFileSync } from "node:fs"
+import { dedent } from "ts-dedent"
 
 export const main = () => {
-  let wd = process.cwd()
+  const cwd = process.cwd()
 
   // If running an example, change the working directory and load nested environment vars
   const exIndex = process.argv.indexOf("-ex")
   if (exIndex >= 0) {
-    const modDir = import.meta.dirname
-    wd = path.resolve(modDir, "../examples", process.argv[exIndex + 1])
+    const thisDir = import.meta.dirname
+    const example = process.argv[exIndex + 1]
+    const exampleDir = resolve(thisDir, "../examples", example)
+
+    // Check for a valid example name
+    if (!existsSync(exampleDir)) {
+      return console.error(dedent`
+        Invalid toolql example: "${example}".
+        Please choose a valid example directory in the toolql repository. 
+      `)
+    }
+
+    const exampleEnvFile = resolve(exampleDir, ".env.template")
+
+    // Find environment variables that need to be configured for the example
+    const templateEnv = readFileSync(exampleEnvFile, "utf8")
+    const templateEnvDecs = templateEnv.match(/^# (\w+)=/gm)
+    const templateEnvVars = templateEnvDecs?.map((s) => s.slice(2, -1)) || []
+
+    // Load environment variables
     configDotenv({
       path: [
-        path.resolve(process.cwd(), ".env"),
-        path.resolve(wd, ".env.template"),
-        path.resolve(wd, ".env")
+        exampleEnvFile, // Load the default configuration for the example
+        resolve(exampleDir, ".env"), // Facilitate toolql development with example level overrides
+        resolve(cwd, ".env") // Working dir overrides everything
       ]
     })
-    if (!(process.env.MCP_PORT || process.env.OPENAI_API_KEY)) {
-      copyFileSync(path.resolve(modDir, "../.env.template"), ".env")
-      console.log(
-        "Created .env file in the current directory. Please configure values."
-      )
-      return
+
+    // Check whether all necessary variables configured
+    const missingVars = templateEnvVars.filter((envVar) => !process.env[envVar])
+    if (missingVars.length) {
+      if (!existsSync(join(cwd, ".env"))) {
+        // Create a local .env file and exit with a prompt to configure
+        copyFileSync(resolve(exampleDir, ".env.template"), ".env")
+        console.log(dedent`
+          Initialised .env file in ${resolve(cwd)}
+          Please read and configure values.
+          file://${resolve(".env")}
+        `)
+        return
+      } else {
+        return console.log(dedent`
+          Missing required environment variables.
+          Try again in an empty directory to generate a sample .env file.
+        `)
+      }
     }
   }
 
   // Initialise GraphQL tools
-  const toolsGql = readFileSync(path.resolve(wd, "tools.graphql"), "utf8")
+  const toolsGql = readFileSync(resolve(cwd, "tools.graphql"), "utf8")
   const url = process.env.GRAPHQL_API
   const headers: any = {}
   if (process.env.GRAPHQL_BEARER) {

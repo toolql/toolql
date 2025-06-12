@@ -17,6 +17,8 @@
     "prepare": "tsc",
     "run-github": "cd examples/github && ../../bin/toolql.js",
     "run-github-ex": "./bin/toolql.js -ex github",
+    "run-missing-ex": "./bin/toolql.js -ex missing",
+    "run-github-ex-missing-env": "rm -rf tmp && mkdir tmp && cd tmp && .././bin/toolql.js -ex github",
     "run-github-ex-mcp": "MCP_PORT=3456 ./bin/toolql.js -ex github",
     "run-star-wars-ex": "./bin/toolql.js -ex star-wars",
     "test": "mocha -r source-map-support/register -r extensionless/register lib/**/**test.js"
