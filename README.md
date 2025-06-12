@@ -9,32 +9,15 @@
 Visit https://toolql.com
 
 
+### Get Started
 
-### Try an example - a simple Github assistant
-
-```
-> npx toolql -ex github
-
-Hi, I'm your personal Github assistant, how can I help?
-- How many repositories do I currently have access to?
-You currently have access to a total of 71 repositories. This includes your own repositories and those you have access to through various organizations.
-- How many organizations does that cover?
-You have access to repositories across 5 organizations.
-- Add a star to the toolql respository
-Thank you for giving a star to the "toolql" repository! The repository now has 1 star. We appreciate your support!
-```
-
-*(Please do give us a star, and check back soon to see the difference you make to our documentation :-)*
-
-
-
-### Three steps to a GraphQL-powered AI Agent
+3 simple steps from an empty directory to an AI powered, GraphQL-connected agent!
 
 Step 1: Set connections in `.env`
 
 ```properties
 GRAPHQL_API=https://swapi-graphql.netlify.app/graphql
-OPENAI_API_KEY=<API_KEY_GOES_HERE>
+OPENAI_API_KEY=<YOUR_API_KEY_GOES_HERE>
 ```
 
 Step 2: Define tools in `tools.graphql`
@@ -58,7 +41,6 @@ query starWars {
 }
 ```
 
-
 Step 3: Run!
 
 ```
@@ -70,6 +52,22 @@ Alderaan has been featured in two Star Wars movies: "A New Hope" and "Revenge of
 
 ```
 
+
+### Actions and Reasoning
+
+The custom Github Assistant example uses instructions about multiple tools to add repository stars.
+
+```
+> npx toolql -ex github
+
+Hi, I'm your personal Github assistant, how can I help?
+- How many repositories do I currently have access to?
+You currently have access to a total of 71 repositories. This includes your own repositories and those you have access to through various organizations.
+- How many organizations does that cover?
+You have access to repositories across 5 organizations.
+- Add a star to the toolql respository
+Thank you for giving a star to the "toolql" repository! The repository now has 1 star. We appreciate your support!
+```
 
 
 ### Next Steps
