@@ -6,8 +6,6 @@ const standardOptions = {
   }
 }
 
-const randChannelName = () => Math.ceil(Math.random() * 1000000).toString()
-
 /**
  * A tagged template literal function that behaves like a non-tagged template.
  * This is used by this library to provide the `gql` tag.
@@ -168,11 +166,6 @@ export class Api {
   headers: any
 
   /**
-   * Set internally to the Socket instance for use in submissions.
-   */
-  socket: Socket
-
-  /**
    * A handler performed on each call response before it is returned to application code.
    * Allows global handling of statuses, errors, header checks (e.g. API version) etc.
    */
@@ -198,16 +191,6 @@ export class Api {
     this.onReponse = options.onResponse
   }
 
-  get log() {
-    return this.socket.log
-  }
-
-  set log(fn) {
-    if (typeof fn === "function") {
-      if (this.socket) this.socket.log = fn
-    }
-  }
-
   /**
    * Execute a query or mutation.
    *
@@ -216,7 +199,8 @@ export class Api {
    */
   async run<T = any>(
     query: string,
-    variables: any = {}
+    variables: any = {},
+    headers: any = {}
   ): Promise<GraphQLResponse<T>> {
     const graphQLResponse = (
       condition: GraphQLResponseCondition,
@@ -254,7 +238,7 @@ export class Api {
       // Make the call
       response = await fetch(this.url, {
         ...standardOptions,
-        headers: { ...standardOptions.headers, ...this.headers },
+        headers: { ...standardOptions.headers, ...this.headers, ...headers },
         body
       })
     } catch (error) {
@@ -294,124 +278,6 @@ export class Api {
         : GraphQLResponseCondition.OK
 
     return graphQLResponse(condition, { data, graphQLErrors: errors })
-  }
-
-  subscribe(
-    query: string,
-    variables: object = {},
-    channelName = randChannelName()
-  ): Subscription {
-    const message = {
-      id: channelName,
-      type: "start",
-      payload: {
-        query,
-        variables
-      }
-    }
-    const startSub = () => this.socket.webSocket.send(JSON.stringify(message))
-
-    if (this.socket) {
-      if (this.socket.subscriptions[channelName]) {
-        throw new Error(
-          `Subscription already exists for channel [${channelName}]`
-        )
-      }
-      if (this.socket.connected) {
-        startSub()
-      } else {
-        this.socket.connectedHandlers.push(startSub)
-      }
-    } else {
-      this.socket = new Socket(this.wsUrl, this.headers, startSub)
-      if (this.log) this.socket.log = this.log
-    }
-
-    const socketSubscription: SocketSubscription = (this.socket.subscriptions[
-      channelName
-    ] = {})
-    const close = () => {
-      delete this.socket.subscriptions[channelName]
-    }
-    const result: Subscription = {
-      onData(handler) {
-        socketSubscription.dataHandler = handler
-        return result
-      },
-      close
-    }
-    return result
-  }
-}
-
-export type SocketSubscription = {
-  dataHandler?: (data: any) => any
-}
-
-class Socket {
-  log: (msg: string) => void
-  webSocket: WebSocket
-  subscriptions: { [id: string]: SocketSubscription }
-  connected: boolean
-  connectedHandlers: Array<() => void>
-
-  /**
-   * Construct a new Socket instance with the given websocket URL
-   */
-  constructor(wsUrl: string, headers: object = {}, onConnected = () => {}) {
-    this.connected = false
-
-    this.connectedHandlers = onConnected ? [onConnected] : []
-
-    this.subscriptions = {}
-
-    this.webSocket = new WebSocket(wsUrl, "graphql-subscriptions")
-
-    this.webSocket.onopen = () => {
-      const message = {
-        type: "connection_init",
-        payload: headers
-      }
-
-      this.webSocket.send(JSON.stringify(message))
-    }
-
-    this.webSocket.onmessage = (event) => {
-      const data = JSON.parse(event.data)
-      let msg
-
-      if (["subscription_fail", "error"].includes(data.type)) {
-        const msg = `GraphQL ${data.type} for channel ${data.id} ${data?.payload.message || ""}`
-        throw new Error(msg)
-      } else if (data.type === "data") {
-        if (
-          this.subscriptions[data.id] &&
-          typeof this.subscriptions[data.id].dataHandler === "function"
-        ) {
-          return this.subscriptions[data.id].dataHandler(data.payload.data)
-        } else
-          msg = `data received for channel [${data.id}] with no subscription handler`
-      } else if (data.type !== "ka") {
-        const messages: { [code: string]: string } = {
-          connection_ack: `[${data.id}] connection_ack, the handshake is complete`,
-          init_fail: `[${data.id}] init_fail returned from the WebSocket server`,
-          subscription_success: `[${data.id}] subscription_success`
-        }
-        msg = messages[data.type]
-        msg =
-          msg ||
-          `unexpected message type [${data.type}] received from WebSocket server`
-        if (
-          data.type === "connection_ack" &&
-          typeof onConnected === "function"
-        ) {
-          this.connected = true
-          this.connectedHandlers.forEach((connHandler) => connHandler())
-        }
-      }
-
-      if (msg && typeof this.log === "function") this.log(`graphqlx: ${msg}`)
-    }
   }
 }
 

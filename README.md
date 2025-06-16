@@ -94,10 +94,8 @@ MCP_PORT=3456
 
 
 
-### Contact Us
+### Be a Pioneer
 
-Accelerate your AI journey with ToolQL!
+Join the ToolQL Pioneer Programme to stay ahead on AI with GraphQL. Free forever!
 
-*Strategy • Design • Development • Mentoring • Training • Support*
-
-https://toolql.com/contact
+https://toolql.com/pioneer
