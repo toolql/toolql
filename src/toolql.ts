@@ -45,7 +45,7 @@ export type QLTool = {
   /**
    * Tool action function.
    */
-  fn?: (args: any) => any
+  fn?: (args: any, context?: any) => any
 
   /**
    * Tool version for MCP. Defaults to 1.0.0.
@@ -211,8 +211,8 @@ export const toolkit = (graphql: string, api: Api): QLTool[] => {
     tool.graphql = [fragmentsGraphQL(tool.fragmentNames), tool.graphql].join(
       "\n\n"
     )
-    tool.fn = async (vars: any) => {
-      const response = await api.run(tool.graphql, vars)
+    tool.fn = async (vars: any, context?: any) => {
+      const response = await api.run(tool.graphql, vars, context?.headers)
       return response.data
     }
   }
