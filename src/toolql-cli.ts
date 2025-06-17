@@ -16,23 +16,24 @@ import { dedent } from "ts-dedent"
 
 export const main = () => {
   const cwd = process.cwd()
+  let toolDir = cwd
 
   // If running an example, change the working directory and load nested environment vars
   const exIndex = process.argv.indexOf("-ex")
   if (exIndex >= 0) {
     const thisDir = import.meta.dirname
     const example = process.argv[exIndex + 1]
-    const exampleDir = resolve(thisDir, "../examples", example)
+    toolDir = resolve(thisDir, "../examples", example)
 
     // Check for a valid example name
-    if (!existsSync(exampleDir)) {
+    if (!existsSync(toolDir)) {
       return console.error(dedent`
         Invalid toolql example: "${example}".
         Please choose a valid example directory in the toolql repository. 
       `)
     }
 
-    const exampleEnvFile = resolve(exampleDir, ".env.template")
+    const exampleEnvFile = resolve(toolDir, ".env.template")
 
     // Find environment variables that need to be configured for the example
     const templateEnv = readFileSync(exampleEnvFile, "utf8")
@@ -43,7 +44,7 @@ export const main = () => {
     configDotenv({
       path: [
         exampleEnvFile, // Load the default configuration for the example
-        resolve(exampleDir, ".env"), // Facilitate toolql development with example level overrides
+        resolve(toolDir, ".env"), // Facilitate toolql development with example level overrides
         resolve(cwd, ".env") // Working dir overrides everything
       ]
     })
@@ -53,10 +54,10 @@ export const main = () => {
     if (missingVars.length) {
       if (!existsSync(join(cwd, ".env"))) {
         // Create a local .env file and exit with a prompt to configure
-        copyFileSync(resolve(exampleDir, ".env.template"), ".env")
+        copyFileSync(resolve(toolDir, ".env.template"), ".env")
         console.log(dedent`
           Initialised .env file in ${resolve(cwd)}
-          Please read and configure values.
+          Please edit and configure connection values.
           file://${resolve(".env")}
         `)
         return
@@ -70,7 +71,7 @@ export const main = () => {
   }
 
   // Initialise GraphQL tools
-  const toolsGql = readFileSync(resolve(cwd, "tools.graphql"), "utf8")
+  const toolsGql = readFileSync(resolve(toolDir, "tools.graphql"), "utf8")
   const url = process.env.GRAPHQL_API
   const headers: any = {}
   if (process.env.GRAPHQL_BEARER) {
