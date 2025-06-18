@@ -146,8 +146,15 @@ export const toolkit = (graphql: string, api: Api): QLTool[] => {
 
   const comments = parseComments(doc)
   // Obtain the comment for the definition at the given location
-  const getComment = (loc: Location) =>
-    comments.find((c) => c.next === loc.startToken)?.value || ""
+  const getComment = (loc: Location) => {
+    const result: Token[] = []
+    let comment = comments.find((c) => c.next === loc.startToken)
+    while (comment) {
+      result.unshift(comment)
+      comment = comments.find((c) => c.next === comment) || null
+    }
+    return result.map((c) => c.value.trim()).join("\n")
+  }
 
   // A name-keyed map of fragments
   const fragments: Record<string, QLFragment> = {}
