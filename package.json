@@ -21,7 +21,7 @@
     "run-github-ex-missing-env": "rm -rf tmp && mkdir tmp && cd tmp && .././bin/toolql.js -ex github",
     "run-github-ex-mcp": "MCP_PORT=3456 ./bin/toolql.js -ex github",
     "run-star-wars-ex": "./bin/toolql.js -ex star-wars",
-    "test": "mocha -r source-map-support/register -r extensionless/register lib/**/**test.js"
+    "test": "node -r source-map-support/register --import extensionless/register node_modules/mocha/bin/mocha.js --ui bdd '**/*test.js'"
   },
   "author": "tim.stewart@toolql.com",
   "repository": "github:toolql/toolql",
