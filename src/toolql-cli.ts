@@ -73,7 +73,9 @@ export const main = () => {
   // Initialise GraphQL tools
   const toolsGql = readFileSync(resolve(toolDir, "tools.graphql"), "utf8")
   const url = process.env.GRAPHQL_API
-  const headers: any = {}
+  const headers: any = process.env.GRAPHQL_HEADERS
+    ? JSON.parse(process.env.GRAPHQL_HEADERS)
+    : {}
   if (process.env.GRAPHQL_BEARER) {
     headers.Authorization = `Bearer ${process.env.GRAPHQL_BEARER}`
   }
