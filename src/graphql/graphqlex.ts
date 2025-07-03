@@ -258,6 +258,9 @@ export class Api {
       const responseJson = await response.clone().json()
       errors = responseJson.errors
       data = responseJson.data
+      if (!errors && !data) {
+        throw new Error(`No data or errors in response\n${responseJson}`)
+      }
     } catch (error) {
       // Response JSON cannot be parsed
       if (error instanceof Error) {
