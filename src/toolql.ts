@@ -8,7 +8,7 @@ import {
   TypeNode
 } from "graphql/language"
 import z from "zod"
-import { Api } from "./graphql/graphqlex"
+import { Api, GraphQLResponseCondition } from "./graphql/graphqlex"
 import { dedent } from "ts-dedent"
 
 /**
@@ -220,6 +220,9 @@ export const toolkit = (graphql: string, api: Api): QLTool[] => {
     )
     tool.fn = async (vars: any, context?: any) => {
       const response = await api.run(tool.graphql, vars, context?.headers)
+      if (response.condition !== GraphQLResponseCondition.OK) {
+        return response
+      }
       return response.data
     }
   }
