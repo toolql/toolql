@@ -6,12 +6,12 @@ import {
   parse,
   Token,
   TypeNode
-} from "graphql/language"
+} from "graphql/language/index.js"
 import z from "zod"
-import { Api, GraphQLResponseCondition } from "./graphql/graphqlex"
+import { Api, GraphQLResponseCondition } from "./graphql/graphqlex.js"
 import { dedent } from "ts-dedent"
 
-export { Api, gql } from "./graphql/graphqlex"
+export { Api, gql } from "./graphql/graphqlex.js"
 
 /**
  * Structure for GraphQL-based tools,
