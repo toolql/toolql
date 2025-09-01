@@ -56,7 +56,7 @@ export type GraphQLResponse<T = any> = {
   /**
    * The original network response.
    */
-  net: Response
+  net?: Response
 
   /**
    * The GraphQL response condition.
@@ -181,12 +181,8 @@ export class Api {
       typeof apiOptions === "string" ? { wsUrl: apiOptions } : apiOptions
     const protocol = url.match(/^(https?):\/\//)[1]
     if (!protocol) throw new Error(`Unexpected API URL [${url}]`)
-    const isSecure = protocol.match(/s$/)
 
     this.url = url
-    this.wsUrl =
-      options.wsUrl ||
-      [`ws${isSecure ? "s" : ""}:`, url.split("//").slice(1)].join("//")
     this.headers = options.headers
     this.onReponse = options.onResponse
   }
@@ -197,7 +193,7 @@ export class Api {
    * The parameter name `query` contains the GraphQL for either operation,
    * as that is the request body key specified within the GraphQL standard.
    */
-  async run<T = any>(
+  async call<T = any>(
     query: string,
     variables: any = {},
     headers: any = {}
@@ -243,11 +239,9 @@ export class Api {
       })
     } catch (error) {
       // Network call failed
-      if (error instanceof Error) {
-        return graphQLResponse(GraphQLResponseCondition.NetworkCallFailed, {
-          error
-        })
-      }
+      return graphQLResponse(GraphQLResponseCondition.NetworkCallFailed, {
+        error: error instanceof Error ? error : new Error(error)
+      })
     }
 
     let errors: GraphQLError[]
@@ -259,15 +253,15 @@ export class Api {
       errors = responseJson.errors
       data = responseJson.data
       if (!errors && !data) {
-        throw new Error(`No data or errors in response\n${responseJson}`)
+        throw new Error(
+          `No data or errors in response\n${JSON.stringify(responseJson)}`
+        )
       }
     } catch (error) {
       // Response JSON cannot be parsed
-      if (error instanceof Error) {
-        return graphQLResponse(GraphQLResponseCondition.InvalidResponse, {
-          error
-        })
-      }
+      return graphQLResponse(GraphQLResponseCondition.InvalidResponse, {
+        error: error instanceof Error ? error : new Error(error)
+      })
     }
     const condition =
       Array.isArray(errors) && errors.length
@@ -281,6 +275,33 @@ export class Api {
         : GraphQLResponseCondition.OK
 
     return graphQLResponse(condition, { data, graphQLErrors: errors })
+  }
+
+  subscribe(
+    query: string,
+    variables: object = {},
+    onData: SubscriptionDataHandler
+  ) {
+    const url = new URL(this.url)
+    url.searchParams.set("query", query)
+    url.searchParams.set("variables", JSON.stringify(variables))
+    const source = new EventSource(url)
+
+    source.addEventListener("next", (event: MessageEvent) => {
+      const { data } = JSON.parse(event.data)
+      onData(data)
+    })
+    source.addEventListener("error", () => {
+      if (typeof this.onReponse === "function") {
+        this.onReponse({
+          condition: GraphQLResponseCondition.RequestError
+          // TODO: Add error details
+        })
+      }
+    })
+    source.addEventListener("complete", () => {
+      source.close()
+    })
   }
 }
 

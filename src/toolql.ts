@@ -11,6 +11,8 @@ import z from "zod"
 import { Api, GraphQLResponseCondition } from "./graphql/graphqlex"
 import { dedent } from "ts-dedent"
 
+export { Api, gql } from "./graphql/graphqlex"
+
 /**
  * Structure for GraphQL-based tools,
  * convertible for use within various A.I. agent environments,
@@ -219,7 +221,7 @@ export const toolkit = (graphql: string, api: Api): QLTool[] => {
       "\n\n"
     )
     tool.fn = async (vars: any, context?: any) => {
-      const response = await api.run(tool.graphql, vars, context?.headers)
+      const response = await api.call(tool.graphql, vars, context?.headers)
       if (response.condition !== GraphQLResponseCondition.OK) {
         return response
       }
